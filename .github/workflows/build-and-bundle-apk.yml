@@ -62,9 +62,9 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          set -x
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add static/releases/geo-spectra-v1.25.0-universal.apk
           git commit -m "chore(ci): bundle geo-spectra-v1.25.0-universal.apk into static/releases" || echo "APK unchanged"
-          git push "https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}.git" HEAD:${{ github.ref_name }}
+          git status --short
+          OUT=$(git push "https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}.git" HEAD:${{ github.ref_name }} 2>&1) && echo "PUSH OK: $OUT" || echo "::warning::PUSH FAILED: $OUT"
