@@ -4,7 +4,11 @@
 // from rough concrete / brick texture and colour-coding aperture width.
 // Uniforms: uTex (camera / image), uTexel, uScaleMmPerPx, uGain.
 #version 300 es
+#ifdef GL_FRAGMENT_PRECISION_HIGH
 precision highp float;
+#else
+precision mediump float;
+#endif
 
 uniform sampler2D uTex;
 uniform vec2  uTexel;
