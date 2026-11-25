@@ -3,7 +3,11 @@
 // contours and Rayleigh surface-wave interferograms reactive to live PGA
 // and HVSR telemetry (uniforms uPga, uKg, uTime).
 #version 300 es
+#ifdef GL_FRAGMENT_PRECISION_HIGH
 precision highp float;
+#else
+precision mediump float;
+#endif
 
 uniform vec2  uRes;
 uniform float uTime;

@@ -6,8 +6,12 @@
   let canvas;
 
   onMount(() => {
+    if (!canvas) return;
     const gl = canvas.getContext('webgl2', { antialias: false, alpha: false });
-    if (!gl) return;
+    if (!gl) {
+      canvas.style.display = 'none';
+      return;
+    }
     const vsSrc = `#version 300 es
       layout(location=0) in vec2 aPos;
       void main(){ gl_Position = vec4(aPos, 0.0, 1.0); }`;
@@ -15,12 +19,27 @@
       const sh = gl.createShader(type);
       gl.shaderSource(sh, src);
       gl.compileShader(sh);
+      if (!gl.getShaderParameter(sh, gl.COMPILE_STATUS)) {
+        console.warn('GEO-SPECTRA shader compile failed:', gl.getShaderInfoLog(sh));
+        return null;
+      }
       return sh;
     };
+    const vs = compile(gl.VERTEX_SHADER, vsSrc);
+    const fs = compile(gl.FRAGMENT_SHADER, fragSrc);
+    if (!vs || !fs) {
+      canvas.style.display = 'none';
+      return;
+    }
     const prog = gl.createProgram();
-    gl.attachShader(prog, compile(gl.VERTEX_SHADER, vsSrc));
-    gl.attachShader(prog, compile(gl.FRAGMENT_SHADER, fragSrc));
+    gl.attachShader(prog, vs);
+    gl.attachShader(prog, fs);
     gl.linkProgram(prog);
+    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) {
+      console.warn('GEO-SPECTRA shader link failed:', gl.getProgramInfoLog(prog));
+      canvas.style.display = 'none';
+      return;
+    }
     gl.useProgram(prog);
     const buf = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, buf);
