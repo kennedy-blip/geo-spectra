@@ -57,3 +57,11 @@ jobs:
         with:
           name: geo-spectra-v1.25.0-universal
           path: static/releases/geo-spectra-v1.25.0-universal.apk
+
+      - name: Commit Bundled APK back to repo (for Vercel static hosting)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add static/releases/geo-spectra-v1.25.0-universal.apk
+          git commit -m "chore(ci): bundle geo-spectra-v1.25.0-universal.apk into static/releases" || echo "APK unchanged"
+          git push origin HEAD:${{ github.ref_name }}
