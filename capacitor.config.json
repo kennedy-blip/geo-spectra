@@ -1,0 +1,12 @@
+{
+  "appId": "com.geospectra.geotechnics",
+  "appName": "GEO-SPECTRA",
+  "webDir": "build",
+  "server": {
+    "androidScheme": "https"
+  },
+  "plugins": {
+    "GeophoneMicrotremorImuPlugin": {},
+    "MacroCrackPhotogrammetryPlugin": {}
+  }
+}

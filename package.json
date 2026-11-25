@@ -1,0 +1,22 @@
+{
+  "name": "geo-spectra",
+  "version": "1.25.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite dev",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@capacitor/android": "^6.1.2",
+    "@capacitor/cli": "^6.1.2",
+    "@capacitor/core": "^6.1.2",
+    "@sveltejs/adapter-auto": "^3.0.2",
+    "@sveltejs/adapter-static": "^3.0.11",
+    "@sveltejs/kit": "^2.5.18",
+    "@sveltejs/vite-plugin-svelte": "^3.1.1",
+    "svelte": "^4.2.19",
+    "vite": "^5.4.8"
+  }
+}
