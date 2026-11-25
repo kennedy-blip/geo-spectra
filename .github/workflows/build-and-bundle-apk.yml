@@ -1,0 +1,52 @@
+name: Build & Bundle GEO-SPECTRA APK
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build-apk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Setup JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install & Build Web
+        run: |
+          npm ci
+          npm run build
+
+      - name: Capacitor Sync (Android)
+        run: npx cap sync android
+
+      - name: Gradle Assemble Release
+        working-directory: android
+        run: ./gradlew assembleRelease
+
+      - name: Bundle APK into static/releases
+        run: |
+          mkdir -p static/releases
+          APK=$(find android -name "*.apk" | head -n 1)
+          cp "$APK" static/releases/geo-spectra-v1.25.0-universal.apk
+          ls -lh static/releases/
+
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: geo-spectra-v1.25.0-universal
+          path: static/releases/geo-spectra-v1.25.0-universal.apk
