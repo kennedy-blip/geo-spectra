@@ -2,7 +2,7 @@ name: Build & Bundle GEO-SPECTRA APK
 
 on:
   push:
-    branches: [main]
+    branches: [main, 'arena/*']
   workflow_dispatch:
 
 jobs:
@@ -34,16 +34,18 @@ jobs:
       - name: Capacitor Sync (Android)
         run: npx cap sync android
 
-      - name: Gradle Assemble Release
+      - name: Gradle Assemble Debug APK
         working-directory: android
-        run: ./gradlew assembleRelease
+        run: ./gradlew assembleDebug
 
       - name: Bundle APK into static/releases
         run: |
           mkdir -p static/releases
           APK=$(find android -name "*.apk" | head -n 1)
+          echo "Found: $APK"
           cp "$APK" static/releases/geo-spectra-v1.25.0-universal.apk
           ls -lh static/releases/
+          sha256sum static/releases/geo-spectra-v1.25.0-universal.apk
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
